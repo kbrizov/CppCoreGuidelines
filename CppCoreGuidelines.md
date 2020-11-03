@@ -368,9 +368,17 @@ Tools that implement these rules shall respect the following syntax to explicitl
 
     [[gsl::suppress(tag)]]
 
-where "tag" is the anchor name of the item where the Enforcement rule appears (e.g., for [C.134](#Rh-public) it is "Rh-public"), the
+and optionally with a message (following usual C++11 standard attribute syntax):
+
+    [[gsl::suppress(tag, justification: "message")]]
+
+where
+
+   - `tag` is the anchor name of the item where the Enforcement rule appears (e.g., for [C.134](#Rh-public) it is "Rh-public"), the
 name of a profile group-of-rules ("type", "bounds", or "lifetime"),
-or a specific rule in a profile ([type.4](#Pro-type-cstylecast), or [bounds.2](#Pro-bounds-arrayindex)).
+or a specific rule in a profile ([type.4](#Pro-type-cstylecast), or [bounds.2](#Pro-bounds-arrayindex))
+
+   - `"message"` is a string literal
 
 ## <a name="SS-struct"></a>In.struct: The structure of this document
 
@@ -2796,7 +2804,7 @@ Passing a shared smart pointer (e.g., `std::shared_ptr`) implies a run-time cost
 
 ##### Note
 
-We can catch dangling pointers statically, so we don't need to rely on resource management to avoid violations from dangling pointers.
+We can catch many common cases of dangling pointers statically (see [lifetime safety profile](#SS-lifetime)). Function arguments naturally live for the lifetime of the function call, and so have fewer lifetime problems.
 
 ##### Enforcement
 
@@ -6428,7 +6436,7 @@ Providing a non-member `swap` function in the same namespace as your type for ca
 
 ##### Enforcement
 
-* (Simple) A class without virtual functions should have a `swap` member function declared.
+* Non-trivially copyable value types should provide a member swap or a free swap overload.
 * (Simple) When a class has a `swap` member function, it should be declared `noexcept`.
 
 ### <a name="Rc-swap-fail"></a>C.84: A `swap` function must not fail
@@ -20499,7 +20507,7 @@ Reference sections:
 * [GCC Coding Conventions](https://gcc.gnu.org/codingconventions.html).
   C++03 and (reasonably) a bit backwards looking.
 * [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
-  Geared toward C++03 and (also) older code bases. Google experts are now actively collaborating here on helping to improve these Guidelines, and hopefully to merge efforts so these can be a modern common set they could also recommend.
+  Geared toward C++17 and (also) older code bases. Google experts are now actively collaborating here on helping to improve these Guidelines, and hopefully to merge efforts so these can be a modern common set they could also recommend.
 * [JSF++: JOINT STRIKE FIGHTER AIR VEHICLE C++ CODING STANDARDS](http://www.stroustrup.com/JSF-AV-rules.pdf).
   Document Number 2RDU00001 Rev C. December 2005.
   For flight control software.
@@ -20511,7 +20519,7 @@ Reference sections:
   Any similarities to this set of guidelines are unsurprising because Bjarne Stroustrup was an author of JSF++.
   Recommended, but note its very specific focus.
 * [MISRA C++ 2008: Guidelines for the use of the C++ language in critical systems](https://www.misra.org.uk/Buyonline/tabid/58/Default.aspx).
-* [Mozilla Portability Guide](https://developer.mozilla.org/en-US/docs/Mozilla/C%2B%2B_Portability_Guide).
+* [Using C++ in Mozilla Code](https://firefox-source-docs.mozilla.org/code-quality/coding-style/using_cxx_in_firefox_code.html).
   As the name indicates, this aims for portability across many (old) compilers.
   As such, it is restrictive.
 * [Geosoft.no: C++ Programming Style Guidelines](http://geosoft.no/development/cppstyle.html).
